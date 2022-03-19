@@ -36,7 +36,11 @@ function commutator() {
   count = 0;
   minscoreall = 10000;
   for (i = 0; i < arr1.length - 1; i++) {
-    if ("UD DU UE EU DE ED RM MR RL LR LM ML FS SF FB BF SB BS".toString().indexOf((arr1[i][0].toString() + arr1[i + 1][0].toString())) > -1) {
+    if (
+      "UD DU UE EU DE ED RM MR RL LR LM ML FS SF FB BF SB BS"
+        .toString()
+        .indexOf(arr1[i][0].toString() + arr1[i + 1][0].toString()) > -1
+    ) {
       locationud[count] = i;
       count = count + 1;
     }
@@ -47,7 +51,7 @@ function commutator() {
     return 0;
   }
   var number = Math.pow(2, count);
-  text1 = ""
+  text1 = "";
   for (i = 0; i <= number - 1; i++) {
     text = String(i.toString(2));
     arrex = arr1.concat();
@@ -66,7 +70,7 @@ function commutator() {
         realscore = score(arrtemp) + j / 3; //penalty factor
       }
       if (j > arrtemp.length / 2) {
-        realscore = score(arrtemp) + 2 * (arrtemp.length - j) / 3; //penalty factor
+        realscore = score(arrtemp) + (2 * (arrtemp.length - j)) / 3; //penalty factor
       }
       // text1 = text1 + i.toString() + "?" + realscore + ","; //+"("+  arrtemp.toString()+")"+",";
       if (realscore < minscore) {
@@ -116,7 +120,7 @@ function commutatormain(array) {
       realscore = score(arrtemp) + i / 3; //penalty factor
     }
     if (i > arrtemp.length / 2) {
-      realscore = score(arrtemp) + 2 * (arrtemp.length - i) / 3; //penalty factor
+      realscore = score(arrtemp) + (2 * (arrtemp.length - i)) / 3; //penalty factor
     }
     // text1 = text1 + i.toString() + "?" + realscore + ","; //+"("+  arrtemp.toString()+")"+",";
     if (realscore < minscore) {
@@ -147,9 +151,9 @@ function commutatormain(array) {
       part2y = simplify(part2x.concat(inverse(part1x.concat())));
       part1 = part1x;
       part2 = part2x;
-      len = part1x.length + part2x.length
-      len1 = part1y.length + part2x.length
-      len2 = part1x.length + part2y.length
+      len = part1x.length + part2x.length;
+      len1 = part1y.length + part2x.length;
+      len2 = part1x.length + part2y.length;
       if (len1 < len2 && len1 < len) {
         part1 = part1y;
         part2 = part2x;
@@ -161,18 +165,31 @@ function commutatormain(array) {
       }
       // text1=part1
       // text2=part2
-      arrex = part1.concat(part2, inverse(part1.concat()), inverse(part2.concat()));
+      arrex = part1.concat(
+        part2,
+        inverse(part1.concat()),
+        inverse(part2.concat())
+      );
       arr = simplify(arrex);
       part1_out = simplifyfinal(part1);
       part2_out = simplifyfinal(part2);
       if (arr.toString() == arr1.toString()) {
         if (part5.length == 0) {
-          text1 = "[" + part1_out + "," + part2_out + "]";
+          text1 = "[" + part1_out + ", " + part2_out + "]";
         }
         if (part5.length > 0) {
-          text1 = part5_out + ":[" + part1_out + "," + part2_out + "]";
+          text1 = "[" + part5_out + ": [" + part1_out + ", " + part2_out + "]]";
         }
-        text2 = "[t,i,j,k]=[" + part5.length.toString() + "," + i.toString() + "," + j.toString() + "," + k.toString() + "]"
+        text2 =
+          "[t,i,j,k]=[" +
+          part5.length.toString() +
+          "," +
+          i.toString() +
+          "," +
+          j.toString() +
+          "," +
+          k.toString() +
+          "]";
         flag = 1;
         break;
       }
@@ -183,11 +200,25 @@ function commutatormain(array) {
   }
 
   if (flag == 0) {
-    text1 = "Not found."
-    text2 = "Not found."
+    text1 = "Not found.";
+    text2 = "Not found.";
   }
-  document.getElementById("result1").innerHTML = text1;
-  document.getElementById("result2").innerHTML = text2;
+  document.getElementById("result1").textContent = text1;
+  document.getElementById("result2").textContent = text2;
+
+  document.querySelector("#original").alg = document.querySelector("#x").value;
+  document.querySelector(
+    "#move-count-original"
+  ).textContent = `${globalThis.notation.experimentalCountMoves(
+    new globalThis.alg.Alg(document.querySelector("#x").value)
+  )} moves`;
+
+  document.querySelector("#structured").alg = text1;
+  document.querySelector(
+    "#move-count-structured"
+  ).textContent = `${globalThis.notation.experimentalCountMoves(
+    new globalThis.alg.Alg(text1)
+  )} moves`;
 }
 
 // R2 D R U' R D' R' U R D R' U R' D' R U' R
@@ -210,7 +241,6 @@ function displace(array) {
   }
   return arrtemp;
 }
-
 
 function score(array) {
   var i;
@@ -255,7 +285,11 @@ function score(array) {
         part1 = part1y;
         part2 = part2x;
       }
-      arrex = part1.concat(part2, inverse(part1.concat()), inverse(part2.concat()));
+      arrex = part1.concat(
+        part2,
+        inverse(part1.concat()),
+        inverse(part2.concat())
+      );
       arr = simplify(arrex);
       if (arr.toString() == arr1.toString()) {
         if (part1.length < part2.length) {
@@ -296,7 +330,14 @@ function conjugate(array) {
   if (t > 0) {
     if (arr[t - 1].length > 1) {
       if (arr[t - 1][1].toString() == "2".toString()) {
-        return simplify(arr.concat().slice(0, t - 1).concat(inverse(arr.concat().slice(arr.length - t, arr.length - (t - 1)))));
+        return simplify(
+          arr
+            .concat()
+            .slice(0, t - 1)
+            .concat(
+              inverse(arr.concat().slice(arr.length - t, arr.length - (t - 1)))
+            )
+        );
       }
     }
   } //For  R' U2 R' D R U R' D' R U R, output R' U':[U',R' D R] instead of R' U2:[R' D R,U]
@@ -326,17 +367,26 @@ function simplifyfinal(array) {
   arr = array.concat();
   arr = simplify(arr);
   for (i = 0; i < arr.length - 1; i++) {
-    if (arr[i][0].toString() == "D".toString() && arr[i + 1][0].toString() == "U".toString()) {
+    if (
+      arr[i][0].toString() == "D".toString() &&
+      arr[i + 1][0].toString() == "U".toString()
+    ) {
       arr = swaparr(arr, i, i + 1);
     }
-    if (arr[i][0].toString() == "B".toString() && arr[i + 1][0].toString() == "F".toString()) {
+    if (
+      arr[i][0].toString() == "B".toString() &&
+      arr[i + 1][0].toString() == "F".toString()
+    ) {
       arr = swaparr(arr, i, i + 1);
     }
-    if (arr[i][0].toString() == "L".toString() && arr[i + 1][0].toString() == "R".toString()) {
+    if (
+      arr[i][0].toString() == "L".toString() &&
+      arr[i + 1][0].toString() == "R".toString()
+    ) {
       arr = swaparr(arr, i, i + 1);
     }
   }
-  arr_out = arr.join(" ") + " "
+  arr_out = arr.join(" ") + " ";
   arr_out = arr_out.replace(/R2 M2 /g, "r2 ");
   arr_out = arr_out.replace(/R' M /g, "r' ");
   arr_out = arr_out.replace(/R M' /g, "r ");
@@ -404,17 +454,21 @@ function simple(array) {
       arr.splice(i, 2);
       break;
     }
-    if (combine_str(arr[i], arr[i + 1]).toString() == (arr[i][0]).toString()) {
+    if (combine_str(arr[i], arr[i + 1]).toString() == arr[i][0].toString()) {
       arr.splice(i + 2, 0, arr[i][0]);
       arr.splice(i, 2);
       break;
     }
-    if (combine_str(arr[i], arr[i + 1]).toString() == (arr[i][0] + "2").toString()) {
+    if (
+      combine_str(arr[i], arr[i + 1]).toString() == (arr[i][0] + "2").toString()
+    ) {
       arr.splice(i + 2, 0, arr[i][0] + "2");
       arr.splice(i, 2);
       break;
     }
-    if (combine_str(arr[i], arr[i + 1]).toString() == (arr[i][0] + "'").toString()) {
+    if (
+      combine_str(arr[i], arr[i + 1]).toString() == (arr[i][0] + "'").toString()
+    ) {
       arr.splice(i + 2, 0, arr[i][0] + "'");
       arr.splice(i, 2);
       break;
@@ -479,7 +533,6 @@ function inverse_str(str) {
   len = str.length;
   if (len == 1) {
     return str + "'";
-
   }
   if (len == 2) {
     if (str[1] == "2") {
@@ -497,3 +550,10 @@ function swaparr(arr, index1, index2) {
 }
 
 document.getElementById("go").addEventListener("click", commutator);
+document.getElementById("x").addEventListener("input", commutator);
+document.getElementById("x").addEventListener("change", commutator);
+
+document.querySelector("#try-it").addEventListener("click", () => {
+  document.getElementById("x").value = "U R S R' S' U2 R' S R S' U";
+  commutator();
+});
