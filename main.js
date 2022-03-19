@@ -2,6 +2,7 @@ function commutator() {
   var locationud = new Array();
   var arrtemp;
   var x = String(document.getElementById("x").value);
+  x = new globalThis.alg.Alg(x).expand().toString();
   if (x.indexOf("R") > -1 || x.indexOf("M") > -1) {
     x = x.replace(/r2/g, "R2 M2");
     x = x.replace(/r'/g, "R' M");
